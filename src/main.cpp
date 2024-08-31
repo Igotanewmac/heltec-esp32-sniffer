@@ -34,15 +34,14 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 unsigned long screenUpdateDelay = 250;
 
 
+/// @brief The periodic screen update function.
+void screenUpdate();
 
 
 
 
 
 
-
-/// @brief Handle the led toggling
-void ledUpdate();
 
 
 #define LED_FLASHSTYLE_STROBE 0
@@ -60,6 +59,8 @@ unsigned long ledTimeOn = 50;
 /// @brief The time in milliseconds that the led should stay off.
 unsigned long ledTimeOff = 950;
 
+/// @brief Handle the led toggling
+void ledUpdate();
 
 
 
@@ -80,7 +81,7 @@ void halt() {
 void setup() {
   
   // turn on the serial port
-  Serial.begin( 9600 );
+  Serial.begin( 115200 );
   
   // configure the led pin
   pinMode( LED_BUILTIN , OUTPUT );
@@ -133,17 +134,21 @@ unsigned long currentTime = 0;
 /// @brief The target time to toggle the led.
 unsigned long ledUpdateTime = 0;
 
-
+/// @brief The target time to update the screen.
 unsigned long screenUpdateTime = 0;
+
 
 
 /// @brief The main execution loop.
 void loop() {
-  
+
+  // get the current time.  
   currentTime = millis();
 
+  // check for led update.
   ledUpdate();
 
+  // check for screen update.
   screenUpdate();
 
 
@@ -252,13 +257,55 @@ void screenUpdate() {
   // clear the display buffer
   display.clearDisplay();
 
-
+  display.setCursor( 0 , 0 );
+  display.print( currentTime );
 
   // update the display from the framebuffer.
   display.display();
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
